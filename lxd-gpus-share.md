@@ -192,6 +192,14 @@ sudo lxc profile set default nvidia.runtime true # 配置LXD支持GPU操作
 # 开机自启动脚本
 
 # 遇到问题
+1.服务器重启后，`nvidia-container-cli info`报错，查了很多资料，最后找到`https://github.com/NVIDIA/libnvidia-container/issues/3`
+输入`sudo nvidia-container-cli -k -d /dev/tty list`即可解决。
+2.多次安装LXD,在`sudo init lxd`时`zpool`已经存在。修改名称或者安装ZFS删除`default pool`
+```shell
+sudo zpool list
+sudo zpool remove deafult
+```
 
 # 参考连接
 > https://blog.csdn.net/dangruchujian/article/details/79338760
+https://blog.csdn.net/weixin_42749767/article/details/83720831
