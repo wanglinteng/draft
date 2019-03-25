@@ -184,9 +184,19 @@ sudo lxc profile set default nvidia.runtime true # 配置LXD支持GPU操作
 
 # 配置模板镜像
 
+查询远程模板镜像`sudo lxc remote list`
+镜像下载到本地`sudo lxc image copy images:ubuntu/16.04 local: --alias ubuntu/16.04 --copy-alias --public`
+创建容器`sudo lxc init ubuntu/16.04 dl-1`
+发布镜像 `sudo lxc publish dl-1 --alias dl-template --public`
+容器启动 `sudo lxc start dl-1`
+容器停止 `sudo lxc stop dl-1`
+容器重启 `sudo lxc restart dl-1`
 
 # 端口映射
-
+dl-1:容器名称
+8985：主机端口
+`lxc config device add dl-1 sshproxy proxy listen=tcp:0.0.0.0:8985 connect=tcp:localhost:22` 
+配置完毕后，即可通过主机端口映射直接登陆dl-1容器`ssh ubuntu@主机地址 -p 8985`，ubuntu为容器内ubuntu16.04系统用户名。
 # 分配容器脚本
 
 # 开机自启动脚本
@@ -194,6 +204,7 @@ sudo lxc profile set default nvidia.runtime true # 配置LXD支持GPU操作
 # 遇到问题
 1.服务器重启后，`nvidia-container-cli info`报错，查了很多资料，最后找到`https://github.com/NVIDIA/libnvidia-container/issues/3`
 输入`sudo nvidia-container-cli -k -d /dev/tty list`即可解决。
+
 2.多次安装LXD,在`sudo init lxd`时`zpool`已经存在。修改名称或者安装ZFS删除`default pool`
 ```shell
 sudo zpool list
