@@ -185,17 +185,25 @@ sudo lxc profile set default nvidia.runtime true # 配置LXD支持GPU操作
 # 配置模板镜像
 
 查询远程模板镜像`sudo lxc remote list`
+
 镜像下载到本地`sudo lxc image copy images:ubuntu/16.04 local: --alias ubuntu/16.04 --copy-alias --public`
+
 创建容器`sudo lxc init ubuntu/16.04 dl-1`
+
 发布镜像 `sudo lxc publish dl-1 --alias dl-template --public`
+
 容器启动 `sudo lxc start dl-1`
+
 容器停止 `sudo lxc stop dl-1`
+
 容器重启 `sudo lxc restart dl-1`
 
 # 端口映射
 dl-1:容器名称
 8985：主机端口
-`lxc config device add dl-1 sshproxy proxy listen=tcp:0.0.0.0:8985 connect=tcp:localhost:22` 
+```shell
+lxc config device add dl-1 sshproxy proxy listen=tcp:0.0.0.0:8985 connect=tcp:localhost:22
+```
 配置完毕后，即可通过主机端口映射直接登陆dl-1容器`ssh ubuntu@主机地址 -p 8985`，ubuntu为容器内ubuntu16.04系统用户名。
 # 分配容器脚本
 
@@ -214,3 +222,4 @@ sudo zpool remove deafult
 # 参考连接
 > https://blog.csdn.net/dangruchujian/article/details/79338760
 https://blog.csdn.net/weixin_42749767/article/details/83720831
+https://blog.csdn.net/weixin_42749767/article/details/84592247
