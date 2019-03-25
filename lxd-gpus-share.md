@@ -175,8 +175,15 @@ sudo apt install snap
 sudo snap install lxd # 这里安装的是目前最新的3.11版本
 ```
 # LXD基础配置
+```shell
+sudo lxd init # 一路回车
+sudo lxd init --auto --network-address=0.0.0.0
+sudo lxd init --auto --storage-backend=dir
+sudo lxc profile set default nvidia.runtime true # 配置LXD支持GPU操作
+```
 
 # 配置模板镜像
+
 
 # 端口映射
 
