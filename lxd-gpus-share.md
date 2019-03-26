@@ -208,15 +208,60 @@ lxc config device add dl-1 sshproxy proxy listen=tcp:0.0.0.0:8985 connect=tcp:lo
 # 分配容器脚本
 
 # 开机自启动脚本
+首先修复`nvidia-container-cli info` 重启报错问题，然后启动容器
+```shell
+	#!/bin/bash
+	### BEGIN INIT INFO
+	# Provides:          land.sh
+	# Required-start:    $local_fs $remote_fs $network $syslog
+	# Required-Stop:     $local_fs $remote_fs $network $syslog
+	# Default-Start:     2 3 4 5
+	# Default-Stop:      0 1 6
+	# Short-Description: starts the svnd.sh daemon
+	# Description:       starts svnd.sh using start-stop-daemon
+	### END INIT INFO
+
+	# change root
+	echo "123456"|sudo -S
+
+	# output log
+	time=$(date "+%Y-%m-%d %T")
+	echo "#@#@" ${time} "@#@#" >>  /opt/gpus-start-log.txt
+
+	# fix nvidia-container-cli info restart problem
+	nvidia-container-cli -k -d /dev/tty list >> /opt/gpus-start-log.txt
+
+	# start containers
+	containers="dl-1 dl-2 dl-3 dl-4"
+	for container in ${containers[@]}
+	do
+	    echo "##@@" ${container} "@@##" >> /opt/gpus-start-log.txt
+	    lxc restart ${container} >> /opt/gpus-start-log.txt
+	done
+
+	# end signal
+	echo "#@#@END@#@#" >> /opt/gpus-start-log.txt
+
+```
+移动到自启动目录`mv ./gpus-server-init.sh /etc/init.d/`
+
+修改权限`sudo chmod a+x ./gpus-server-init.sh `
+
+添加启动项 `sudo update-rc.d gpus-server-init.sh defaults 95`
 
 # 遇到问题
 1.服务器重启后，`nvidia-container-cli info`报错，查了很多资料，最后找到`https://github.com/NVIDIA/libnvidia-container/issues/3`
+
 输入`sudo nvidia-container-cli -k -d /dev/tty list`即可解决。
 
-2.多次安装LXD,在`sudo init lxd`时`zpool`已经存在。修改名称或者安装ZFS删除`default pool`
+2.多次安装LXD,在`sudo init lxd`时`zpool`已经存在。
+
+修改名称或者安装ZFS删除`default pool`
+
 ```shell
+sudo apt install zfsutils-linux # 安装ZFS
 sudo zpool list
-sudo zpool remove deafult
+sudo zpool destroy default # 销毁前要停止lxc容器服务
 ```
 
 # 参考连接
