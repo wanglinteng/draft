@@ -210,37 +210,37 @@ lxc config device add dl-1 sshproxy proxy listen=tcp:0.0.0.0:8985 connect=tcp:lo
 # 开机自启动脚本
 首先修复`nvidia-container-cli info` 重启报错问题，然后启动容器
 ```shell
-	#!/bin/bash
-	### BEGIN INIT INFO
-	# Provides:          land.sh
-	# Required-start:    $local_fs $remote_fs $network $syslog
-	# Required-Stop:     $local_fs $remote_fs $network $syslog
-	# Default-Start:     2 3 4 5
-	# Default-Stop:      0 1 6
-	# Short-Description: starts the svnd.sh daemon
-	# Description:       starts svnd.sh using start-stop-daemon
-	### END INIT INFO
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          land.sh
+# Required-start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the svnd.sh daemon
+# Description:       starts svnd.sh using start-stop-daemon
+### END INIT INFO
 
-	# change root
-	echo "123456"|sudo -S
+# change root
+echo "123456"|sudo -S
 
-	# output log
-	time=$(date "+%Y-%m-%d %T")
-	echo "#@#@" ${time} "@#@#" >>  /opt/gpus-start-log.txt
+# output log
+time=$(date "+%Y-%m-%d %T")
+echo "#@#@" ${time} "@#@#" >>  /opt/gpus-start-log.txt
 
-	# fix nvidia-container-cli info restart problem
-	nvidia-container-cli -k -d /dev/tty list >> /opt/gpus-start-log.txt
+# fix nvidia-container-cli info restart problem
+nvidia-container-cli -k -d /dev/tty list >> /opt/gpus-start-log.txt
 
-	# start containers
-	containers="dl-1 dl-2 dl-3 dl-4"
-	for container in ${containers[@]}
-	do
-	    echo "##@@" ${container} "@@##" >> /opt/gpus-start-log.txt
-	    lxc restart ${container} >> /opt/gpus-start-log.txt
-	done
+# start containers
+containers="dl-1 dl-2 dl-3 dl-4"
+for container in ${containers[@]}
+do
+    echo "##@@" ${container} "@@##" >> /opt/gpus-start-log.txt
+    lxc restart ${container} >> /opt/gpus-start-log.txt
+done
 
-	# end signal
-	echo "#@#@END@#@#" >> /opt/gpus-start-log.txt
+# end signal
+echo "#@#@END@#@#" >> /opt/gpus-start-log.txt
 
 ```
 移动到自启动目录`mv ./gpus-server-init.sh /etc/init.d/`
