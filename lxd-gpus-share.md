@@ -264,6 +264,10 @@ sudo zpool list
 sudo zpool destroy default # 销毁前要停止lxc容器服务
 ```
 
+# SSH 文件上传下载
+文件下载 `scp ubuntu@222.25.236.23:~/Desktop/install.md ~/Desktop/`，下载222.25.236.23主机的~/Desktop/install.md，用户名ubuntu
+文件上传 `scp /path/filename username@servername:/path/`
+
 # 参考连接
 > https://blog.csdn.net/dangruchujian/article/details/79338760
 
