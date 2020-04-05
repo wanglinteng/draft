@@ -267,6 +267,6 @@ sudo zpool destroy default # 销毁前要停止lxc容器服务
 # 参考连接
 > https://blog.csdn.net/dangruchujian/article/details/79338760
 
-https://blog.csdn.net/weixin_42749767/article/details/83720831
+> https://blog.csdn.net/weixin_42749767/article/details/83720831
 
-https://blog.csdn.net/weixin_42749767/article/details/84592247
+> https://blog.csdn.net/weixin_42749767/article/details/84592247
